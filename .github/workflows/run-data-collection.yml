@@ -69,7 +69,6 @@ jobs:
         run: uv run main.py
 
       - name: Upload to Google Drive
-        working-directory: cn-engagement-snapshots
         run: |
           DRIVE_FOLDER_ID=$(jq -r '.drive_folder_id' src/config.json)
           rclone copy ./data gdrive: \

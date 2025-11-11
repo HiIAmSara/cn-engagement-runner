@@ -6,24 +6,30 @@ This repository allows one to run the data collection workflow from [cn-engageme
 
 Go to your repository's **Settings → Secrets and variables → Actions** and add the following secrets:
 
-#### `CREDENTIALS_JSON`
+### `CREDENTIALS_JSON`
+
 Twitter API credentials in JSON format. Should look like:
+
 ```json
 {
   "bearer_token": "your_twitter_bearer_token_here"
 }
 ```
 
-#### `CONFIG_JSON`
+### `CONFIG_JSON`
+
 Configuration file including the Google Drive folder ID. Should look like:
+
 ```json
 {
   "drive_folder_id": "your_google_drive_folder_id_here"
 }
 ```
 
-#### `RCLONE_CONF`
+### `RCLONE_CONF`
+
 Rclone configuration for Google Drive access. Should look like:
+
 ```
 [gdrive]
 type = drive
@@ -33,11 +39,13 @@ team_drive =
 ```
 
 To generate your rclone config:
+
 1. Install rclone: `brew install rclone` (macOS) or see [rclone.org](https://rclone.org/install/)
 2. Run: `rclone config`
 3. Create a new remote named `gdrive` with type `drive`
 4. Follow the authentication prompts
 5. Copy the contents of `~/.config/rclone/rclone.conf`
 
-#### `GH_PAT`
+### `GH_PAT`
+
 GitHub Personal Access Token to access the private `cn-engagement-snapshots` repository.

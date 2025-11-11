@@ -1,9 +1,7 @@
-name: Run Data Collection
+name: Data Collection
 
 on:
   workflow_dispatch: # Allows manual triggering
-  schedule:
-    - cron: '*/5 * * * *' # Run every 5 minutes (adjust as needed)
 
 jobs:
   collect-data:
@@ -13,7 +11,8 @@ jobs:
       - name: Clone cn-engagement-snapshots repository
         uses: actions/checkout@v4
         with:
-          repository: 'is28/cn-engagement-snapshots' # Update with actual repo owner/name
+          repository: 'isaacOnline/cn-engagement-snapshots'
+          token: ${{ secrets.GH_PAT }}
           path: 'cn-engagement-snapshots'
 
       - name: Set up Python
@@ -60,7 +59,7 @@ jobs:
         run: |
           echo '${{ secrets.CREDENTIALS_JSON }}' > secrets/credentials.json
 
-      - name: Create config.json
+      - name: Create config.json with drive_folder_id
         working-directory: cn-engagement-snapshots
         run: |
           echo '${{ secrets.CONFIG_JSON }}' > src/config.json

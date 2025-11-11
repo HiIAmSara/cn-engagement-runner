@@ -1,0 +1,85 @@
+name: Run Data Collection
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  schedule:
+    - cron: '*/5 * * * *' # Run every 5 minutes (adjust as needed)
+
+jobs:
+  collect-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone cn-engagement-snapshots repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'is28/cn-engagement-snapshots' # Update with actual repo owner/name
+          path: 'cn-engagement-snapshots'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Cache rclone
+        id: cache-rclone
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/bin/rclone
+          key: rclone-${{ runner.os }}-latest
+
+      - name: Install rclone
+        if: steps.cache-rclone.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/.local/bin
+          curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
+          unzip -q rclone-current-linux-amd64.zip
+          cp rclone-*-linux-amd64/rclone ~/.local/bin/
+          chmod +x ~/.local/bin/rclone
+          rm -rf rclone-*-linux-amd64*
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Write rclone config
+        run: |
+          mkdir -p ~/.config/rclone
+          printf "%s\n" "$RCLONE_CONF" > ~/.config/rclone/rclone.conf
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Create secrets directory
+        working-directory: cn-engagement-snapshots
+        run: mkdir -p secrets
+
+      - name: Create credentials.json
+        working-directory: cn-engagement-snapshots
+        run: |
+          echo '${{ secrets.CREDENTIALS_JSON }}' > secrets/credentials.json
+
+      - name: Create config.json
+        working-directory: cn-engagement-snapshots
+        run: |
+          echo '${{ secrets.CONFIG_JSON }}' > src/config.json
+
+      - name: Run main.py
+        working-directory: cn-engagement-snapshots
+        run: uv run main.py
+
+      - name: Upload to Google Drive
+        working-directory: cn-engagement-snapshots
+        run: |
+          DRIVE_FOLDER_ID=$(jq -r '.drive_folder_id' src/config.json)
+          rclone copy ./data gdrive: \
+            --drive-root-folder-id "$DRIVE_FOLDER_ID" \
+            --fast-list \
+            --drive-chunk-size 64M \
+            --transfers 32 \
+            --checkers 32 \
+            --no-traverse \
+            --stats 0 \
+            --exclude "cn_engagement_snapshots.db" \
+            --error-on-no-transfer

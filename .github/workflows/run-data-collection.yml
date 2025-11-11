@@ -70,7 +70,7 @@ jobs:
 
       - name: Upload to Google Drive
         run: |
-          DRIVE_FOLDER_ID=$(jq -r '.drive_folder_id' src/config.json)
+          DRIVE_FOLDER_ID=$(jq -r '.drive_folder_id' cn-engagement-snapshots/src/config.json)
           rclone copy ./data gdrive: \
             --drive-root-folder-id "$DRIVE_FOLDER_ID" \
             --fast-list \

@@ -72,8 +72,8 @@ jobs:
         working-directory: cn-engagement-snapshots
         run: |
           DRIVE_FOLDER_ID=$(jq -r '.drive_folder_id' src/config.json)
-          rclone copy ./data gdrive: \
-            --drive-root-folder-id "cn-engagement_snapshots/$DRIVE_FOLDER_ID" \
+          rclone copy data gdrive: \
+            --drive-root-folder-id "$DRIVE_FOLDER_ID" \
             --fast-list \
             --drive-chunk-size 64M \
             --transfers 32 \

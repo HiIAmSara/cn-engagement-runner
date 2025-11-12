@@ -4,9 +4,9 @@ This repository allows one to run the data collection workflow from [cn-engageme
 
 ## Setup Instructions
 
-Go to your repository's **Settings → Secrets and variables → Actions** and add the following secrets:
+Go to your repository's **Settings → Secrets and variables → Actions** and add the following:
 
-### `CREDENTIALS_JSON`
+### Secret: `CREDENTIALS_JSON`
 
 Twitter API credentials in JSON format. Should look like:
 
@@ -16,17 +16,7 @@ Twitter API credentials in JSON format. Should look like:
 }
 ```
 
-### `CONFIG_JSON`
-
-Configuration file including the Google Drive folder ID. Should look like:
-
-```json
-{
-  "drive_folder_id": "your_google_drive_folder_id_here"
-}
-```
-
-### `RCLONE_CONF`
+###  Secret: `RCLONE_CONF`
 
 Rclone configuration for Google Drive access. Should look like:
 
@@ -46,6 +36,33 @@ To generate your rclone config:
 4. Follow the authentication prompts
 5. Copy the contents of `~/.config/rclone/rclone.conf`
 
-### `GH_PAT`
+###  Secret: `GH_PAT`
 
 GitHub Personal Access Token to access the private `cn-engagement-snapshots` repository.
+
+
+### Variable: `CONFIG_JSON`
+
+Configuration file including the Google Drive folder ID. Should look like:
+
+```json
+{
+  "drive_folder_id": "your_google_drive_folder_id_here"
+}
+```
+
+## Cloudflare Trigger Setup
+
+To trigger the workflow via Cloudflare Workers (using CLI):
+
+1. Install Wrangler: `npm install -g wrangler`
+2. Login: `wrangler login`
+3. Deploy the worker: `wrangler deploy`
+4. Set secrets:
+
+   ```bash
+   wrangler secret put GITHUB_TOKEN
+   wrangler secret put GITHUB_REPO
+   ```
+
+5. Configure cron trigger in `wrangler.toml` if needed

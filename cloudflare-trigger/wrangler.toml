@@ -1,0 +1,10 @@
+name = "github-workflow-trigger"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Cron trigger - runs every 10 minutes
+[triggers]
+crons = ["*/10 * * * *"]
+
+# Environment variables will be set via CLI:
+# wrangler secret put GITHUB_TOKEN

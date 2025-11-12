@@ -62,27 +62,16 @@ jobs:
       - name: Create config.json with drive_folder_id
         working-directory: cn-engagement-snapshots
         run: |
-          echo '${{ secrets.CONFIG_JSON }}' > src/config.json
+          echo '${{ vars.CONFIG_JSON }}' > src/config.json
 
       - name: Run main.py
         working-directory: cn-engagement-snapshots
         run: uv run main.py
 
-      - name: Debug filesystem
-        run: |
-          echo "=== Current directory ==="
-          pwd
-          echo "=== Files in current directory ==="
-          ls -la
-          echo "=== Files in cn-engagement-snapshots ==="
-          ls -la cn-engagement-snapshots/
-          echo "=== Looking for data directory ==="
-          find . -type d -name "data" 2>/dev/null || echo "No data directory found"
-
       - name: Upload to Google Drive
         run: |
           DRIVE_FOLDER_ID=$(jq -r '.drive_folder_id' cn-engagement-snapshots/src/config.json)
-          rclone copy ./data gdrive: \
+          rclone copy /data/cn_engagement_snapshots gdrive: \
             --drive-root-folder-id "$DRIVE_FOLDER_ID" \
             --fast-list \
             --drive-chunk-size 64M \

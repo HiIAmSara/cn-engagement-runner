@@ -6,7 +6,7 @@
  */
 
 async function triggerWorkflow(env) {
-  const owner = 'marcuschen92';
+  const owner = 'amirpatel1989';
   const repo = 'cn-engagement-runner';
   const workflow = 'run-data-collection.yml';
 

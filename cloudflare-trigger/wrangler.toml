@@ -6,5 +6,5 @@ compatibility_date = "2024-01-01"
 [triggers]
 crons = ["10 * * * *"]
 
-# Environment variables will be set via CLI:
+# Secret will be set via CLI:
 # wrangler secret put GITHUB_TOKEN

@@ -21,3 +21,8 @@ build/
 # Temporary files
 *.tmp
 *.bak
+
+# Cloudflare
+cloudflare-trigger/.wrangler/*
+cloudflare-trigger/node_modules/*
+cloudflare-trigger/.dev.vars

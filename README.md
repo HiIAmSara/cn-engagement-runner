@@ -57,12 +57,11 @@ To trigger the workflow via Cloudflare Workers (using CLI):
 
 1. Install Wrangler: `npm install -g wrangler`
 2. Login: `wrangler login`
-3. Deploy the worker: `wrangler deploy`
+3. Deploy the worker: `cd cloudflare-trigger && wrangler deploy`
 4. Set secrets:
 
    ```bash
    wrangler secret put GITHUB_TOKEN
-   wrangler secret put GITHUB_REPO
    ```
 
 5. Configure cron trigger in `wrangler.toml` if needed

@@ -18,6 +18,10 @@ build/
 *.swo
 *~
 
+# GitHub
+.github/.secrets
+.github/.variables
+
 # Temporary files
 *.tmp
 *.bak

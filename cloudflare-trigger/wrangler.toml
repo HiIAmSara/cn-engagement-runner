@@ -1,4 +1,4 @@
-name = "github-workflow-trigger-ap20"
+name = "github-workflow-trigger-sk30"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 

@@ -2,9 +2,9 @@ name = "github-workflow-trigger-ap20"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# Cron trigger - runs at the 20th minute of every hour
+# Cron trigger - runs at the 30th minute of every hour
 [triggers]
-crons = ["20 * * * *"]
+crons = ["30 * * * *"]
 
 # Secret will be set via CLI:
 # wrangler secret put GITHUB_TOKEN
